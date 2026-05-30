@@ -1,0 +1,45 @@
+<!-- MuJoCo XML for assets/ur5e_scene.xml -->
+<mujoco model="ur5e_pusht_scene">
+    <compiler angle="radian" coordinate="local"/>
+    <option timestep="0.002" gravity="0 0 -9.81"/>
+
+    <!-- 导入你的 UR5e 模型 -->
+    <include file="/home/cyw/桌面/ur5e_pusht_dp_Ge/envs/assets/ur5e/ur5e.xml"/>
+
+    <!-- 全局资产：材质、视觉贴图等 -->
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="512"/>
+        <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 .15 .2" width="512" height="512"/>
+        <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true"/>
+    </asset>
+
+    <worldbody>
+        <!-- 光照与地面 -->
+        <light directional="true" diffuse=".8 .8 .8" specular=".2 .2 .2" pos="0 0 5" dir="0 0 -1"/>
+        <geom name="floor" type="plane" size="0 0 1" pos="0 0 0" material="matplane" condim="3"/>
+
+        <!-- 桌子：确保它在机械臂前方，且保持安全距离 -->
+        <body name="table" pos="0.6 0 0.4">
+            <!-- 桌腿和桌面可以通过多个 box geom 拼接，这里为了简便先用一个大 box 代替桌面 -->
+            <geom name="table_top" type="box" size="0.4 0.4 0.02" rgba="0.6 0.5 0.4 1" friction="1 0.005 0.0001"/>
+        </body>
+
+        <!-- T 型物块：必须带有 freejoint 以便在物理世界中受力移动 -->
+        <body name="t_cube" pos="0.6 0 0.45">
+            <freejoint name="t_cube_joint"/>
+            <!-- T 的横向部分 -->
+            <geom name="t_bar_1" type="box" size="0.02 0.06 0.02" pos="0 0 0" rgba="0.8 0.2 0.2 1" mass="0.1" friction="1 0.005 0.0001"/>
+            <!-- T 的纵向部分 -->
+            <geom name="t_bar_2" type="box" size="0.06 0.02 0.02" pos="-0.04 0 0" rgba="0.8 0.2 0.2 1" mass="0.1" friction="1 0.005 0.0001"/>
+        </body>
+
+        <!-- 目标区域指示器 (纯视觉，无碰撞) -->
+        <body name="target_zone" pos="0.7 0.2 0.421">
+            <geom type="box" size="0.02 0.06 0.001" pos="0 0 0" rgba="0 1 0 0.3" contype="0" conaffinity="0"/>
+            <geom type="box" size="0.06 0.02 0.001" pos="-0.04 0 0" rgba="0 1 0 0.3" contype="0" conaffinity="0"/>
+        </body>
+
+        <!-- 俯视相机：为 Diffusion Policy 提供全局视觉输入 -->
+        <camera name="overhead_cam" pos="0.6 0 1.7" euler="0 0 0" fovy="60"/>
+    </worldbody>
+</mujoco>

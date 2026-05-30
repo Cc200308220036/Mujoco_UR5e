@@ -1,0 +1,32 @@
+# Large data files (excluded from git)
+dataset/raw/
+dataset/pusht_ur5e_vision.zarr/
+dataset/pusht_ur5e_vision.zarr.zip
+checkpoints/
+
+# Local config
+.claude/
+*.pptx
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

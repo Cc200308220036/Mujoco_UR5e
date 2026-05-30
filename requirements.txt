@@ -1,0 +1,6 @@
+mujoco
+gymnasium
+numpy
+torch
+zarr
+diffusers
